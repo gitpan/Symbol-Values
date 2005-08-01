@@ -4,20 +4,26 @@ package Symbol::Values;
 
 # Symbol::Values.pm
 # ------------------------------------------------------------------------
-# Revision: $Id: Values.pm,v 1.10 2005/08/01 09:18:12 kay Exp $
+# Revision: $Id: Values.pm,v 1.16 2005/08/01 18:03:10 kay Exp $
 # Written by Keitaro Miyazaki<KHC03156@nifty.ne.jp>
 # Copyright 2005 Keitaro Miyazaki All Rights Reserved.
 
 # HISTORY
 # ------------------------------------------------------------------------
+# 2005-08-02 Version 1.0.1
+#            - Fixed typo regarding to package name in POD document.
+#            - Improved warning message handling by "use warnings::register".
+#            - The "new" method will raise exception when invalid symbol name
+#              was passed.
 # 2005-07-31 Version 1.0.0
-#            Initial version.
-#            Rewrited as CPAN module.
+#            - Initial version.
+#            - Rewrited as CPAN module.
 # 2005-07-29 Wrote prototype of this module.
 
 use 5.008006;
 use strict;
 use warnings;
+use warnings::register;
 use Exporter;
 use Carp;
 use Symbol ();
@@ -30,12 +36,12 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '1.00';
-our $REVISION = '$Id';
+our $VERSION = '1.01';
+our $REVISION = '$Id: Values.pm,v 1.16 2005/08/01 18:03:10 kay Exp $';
 
 =head1 NAME
 
-Symbol::Value - Provides consistent accessing interface to values of symbol.
+Symbol::Values - Provides consistent accessing interface to values of symbol.
 
 =head1 SYNOPSIS
 
@@ -65,7 +71,7 @@ Symbol::Value - Provides consistent accessing interface to values of symbol.
 
 I've been feeling that glob notation of perl is little bit funny.
 
-First problem is that it lacks consistency in the way of 
+One problem is that it lacks consistency in the way of 
 fetching/storing values of a symbol.
 
 See examples below.
@@ -80,7 +86,7 @@ See examples below.
   *name = $code_ref;          # This code works...
                               # Isn't it funny?
 
-Second problem is readability of the code.
+The other problem is readability of the code.
 
 I think that inconsistency of the glob notation is making readability
 of the code little bit difficult.
@@ -125,14 +131,14 @@ by package name, it will be qualified by current package name.
   $obj = Symbol::Values->new(*a);        # glob.
   $obj = Symbol::Values->new(*main::a);  # same as above.
 
-There is alternative function to new method, called "symbol".
+There is alternative way of using "new" method:
 
   use Symbol::Values 'symbol';
   
   my $obj = symbol($symbol_name_or_glob);
 
-This function is not exported by default, so if you prefer to use
-this shortcut function, you should import it explicitly.
+This function "symbol" is not exported by default, so if you prefer to use
+this syntactic sugar, you should import it explicitly.
 
 =cut
 
@@ -162,14 +168,23 @@ sub new {
 		
 		no strict 'refs';
 		
-		unless (exists ${$sym_tbl}{$name}) {
-			carp "No such symbol \"${sym_tbl}${name}\"";
+		my $new_symbol = 0;
+		if (warnings::enabled() && !exists(${$sym_tbl}{$name})) {
+			$new_symbol = 1;
 		}
 
 		$r_glob = eval "\\\*${sym_tbl}${name}";
 		use strict 'refs';
+		
+		unless(defined $r_glob) {
+			croak "FATAL: Invalid symbol name \"$glob_or_sym\"";
+		}
+		
+		if ($new_symbol) {
+			carp "WARNING: New symbol \"${sym_tbl}${name}\" created";
+		}
 	}
-
+	
 	bless [$r_glob]
 }
 
