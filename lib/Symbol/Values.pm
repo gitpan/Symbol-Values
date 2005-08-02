@@ -4,12 +4,14 @@ package Symbol::Values;
 
 # Symbol::Values.pm
 # ------------------------------------------------------------------------
-# Revision: $Id: Values.pm,v 1.16 2005/08/01 18:03:10 kay Exp $
+# Revision: $Id: Values.pm,v 1.18 2005/08/02 17:58:23 kay Exp $
 # Written by Keitaro Miyazaki<KHC03156@nifty.ne.jp>
 # Copyright 2005 Keitaro Miyazaki All Rights Reserved.
 
 # HISTORY
 # ------------------------------------------------------------------------
+# 2005-08-02 Version 1.0.2
+#            - Changed "use 5.006" to "use 5.006".
 # 2005-08-02 Version 1.0.1
 #            - Fixed typo regarding to package name in POD document.
 #            - Improved warning message handling by "use warnings::register".
@@ -20,7 +22,7 @@ package Symbol::Values;
 #            - Rewrited as CPAN module.
 # 2005-07-29 Wrote prototype of this module.
 
-use 5.008006;
+use 5.006;
 use strict;
 use warnings;
 use warnings::register;
@@ -36,8 +38,8 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '1.01';
-our $REVISION = '$Id: Values.pm,v 1.16 2005/08/01 18:03:10 kay Exp $';
+our $VERSION = '1.02';
+our $REVISION = '$Id: Values.pm,v 1.18 2005/08/02 17:58:23 kay Exp $';
 
 =head1 NAME
 
@@ -452,8 +454,7 @@ Keitaro Miyazaki, E<lt>KHC03156@nifty.ne.jpE<gt>
 Copyright (C) 2005 by Keitaro Miyazaki
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.6 or,
-at your option, any later version of Perl 5 you may have available.
+it under the same terms as Perl itself.
 
 
 =cut

@@ -1,6 +1,6 @@
-use 5.008006;
+use 5.006;
 use ExtUtils::MakeMaker;
-# $Id: Makefile.PL,v 1.1.1.1 2005/07/31 15:47:40 kay Exp $
+# $Id: Makefile.PL,v 1.2 2005/08/02 06:30:29 kay Exp $
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 WriteMakefile(
