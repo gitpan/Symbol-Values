@@ -1,9 +1,15 @@
 Revision history for Perl extension Symbol::Values.
-$Id: Changes,v 1.4 2005/08/01 17:32:46 kay Exp $
+$Id: Changes,v 1.5 2005/08/03 20:53:58 kay Exp $
+
+1.03  Thu Aug 04 2005
+    - Fixed the bug could not access to special variables.
+
+1.02  Wed Aug 03 2005
+    - Changed pragma "use 5.008" to "use 5.006".
 
 1.01  Mon Aug 02 2005
     - Fixed typo regarding to package name in POD document.
-	- Improved handling of warning message.
+    - Improved handling of warning message.
       If you feel that warning message is annoying, try
       "no warnings 'Symbol::Values'" and warning message is
       no longer displayed.
@@ -11,4 +17,4 @@ $Id: Changes,v 1.4 2005/08/01 17:32:46 kay Exp $
       name was passed.
 
 1.00  Sun Jul 31 2005
-	- original version;
+    - original version;

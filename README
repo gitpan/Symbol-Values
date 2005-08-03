@@ -1,53 +1,53 @@
-Symbol-Values version 1.00
+Symbol-Values version 1.03
 ==========================================================================
- $Id: README,v 1.2 2005/08/01 09:19:14 kay Exp $
+ $Id: README,v 1.4 2005/08/03 20:41:07 kay Exp $
 ===========================================================================
 
 DESCRIPTION
-
-This module provides consistent accessing interface to values of symbol.
-
-Below is the background why I wore this module.
-
-I've been feeling that glob notation of perl is little bit funny.
-
-First problem is that it lacks consistency in the way of 
-fetching/storing values of a symbol.
-
-See examples below.
-
-  $code_ref = *name{CODE};    # Getting code object.
-                              # This is obvious.
-  
-  *name{CODE} = $code_ref;    # Setting code object.
-                              # THIS CODE DOES NOT WORK!!
-  
-  
-  *name = $code_ref;          # This code works...
-                              # Isn't it funny?
-
-Second problem is readability of the code.
-
-I think that inconsistency of the glob notation is making
-readability of the code little bit difficult.
-
-Therefore I wrote this module to provide alternative way of accessing
-to the values of a symbol.
-
-By using this module, above examples can be wrote as below.
-
-  use Symbol::Values;
-  my $sym = Symbol::Values->new('name');
-  
-  $code_ref = $sym->code;    # Getting code object.
-  
-  $sym->code = $code_ref;    # Setting code object.
-
-I hope this module makes your code more readable.
-
+    This module provides consistent accessing interface to values of symbol.
+    
+    Below is the background why I wore this module.
+    
+    I've been feeling that glob notation of perl is little bit funny.
+    
+    First problem is that it lacks consistency in the way of 
+    fetching/storing values of a symbol.
+    
+    See examples below.
+    
+      $code_ref = *name{CODE};    # Getting code object.
+                                  # This is obvious.
+      
+      *name{CODE} = $code_ref;    # Setting code object.
+                                  # THIS CODE DOES NOT WORK!!
+      
+      
+      *name = $code_ref;          # This code works...
+                                  # Isn't it funny?
+    
+    Second problem is readability of the code.
+    
+    I think that inconsistency of the glob notation is making
+    readability of the code little bit difficult.
+    
+    Therefore I wrote this module to provide alternative way of accessing
+    to the values of a symbol.
+    
+    By using this module, above examples can be wrote as below.
+    
+      use Symbol::Values;
+      my $sym = Symbol::Values->new('name');
+      
+      $code_ref = $sym->code;    # Getting code object.
+      
+      $sym->code = $code_ref;    # Setting code object.
+    
+    I hope this module makes your code more readable.
+    
 REQUIREMENTS
 
-This module uses lvalue function, so Perl > 5.6 is required.
+    Perl, version 5.6 or more.
+    This module provides lvalue function, so Perl > 5.6 is required.
 
 INSTALLATION
 
@@ -60,11 +60,7 @@ To install this module type the following:
 
 DEPENDENCIES
 
-This module requires these other modules and libraries:
-
-  Carp
-  Symbol
-  Tie::Scalar
+    No non-standard module is required.
 
 COPYRIGHT AND LICENCE
 

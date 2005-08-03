@@ -4,14 +4,16 @@ package Symbol::Values;
 
 # Symbol::Values.pm
 # ------------------------------------------------------------------------
-# Revision: $Id: Values.pm,v 1.18 2005/08/02 17:58:23 kay Exp $
+# Revision: $Id: Values.pm,v 1.20 2005/08/03 20:43:24 kay Exp $
 # Written by Keitaro Miyazaki<KHC03156@nifty.ne.jp>
 # Copyright 2005 Keitaro Miyazaki All Rights Reserved.
 
 # HISTORY
 # ------------------------------------------------------------------------
-# 2005-08-02 Version 1.0.2
-#            - Changed "use 5.006" to "use 5.006".
+# 2005-08-04 Version 1.0.3
+#            - Fixed the bug could not access to special variables.
+# 2005-08-03 Version 1.0.2
+#            - Changed "use 5.008" to "use 5.006".
 # 2005-08-02 Version 1.0.1
 #            - Fixed typo regarding to package name in POD document.
 #            - Improved warning message handling by "use warnings::register".
@@ -38,8 +40,8 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '1.02';
-our $REVISION = '$Id: Values.pm,v 1.18 2005/08/02 17:58:23 kay Exp $';
+our $VERSION = '1.03';
+our $REVISION = '$Id: Values.pm,v 1.20 2005/08/03 20:43:24 kay Exp $';
 
 =head1 NAME
 
@@ -176,6 +178,12 @@ sub new {
 		}
 
 		$r_glob = eval "\\\*${sym_tbl}${name}";
+		
+		# May be special vailable
+		unless (defined $r_glob) {
+			$r_glob = eval "\\\*{$name}";
+			$new_symbol = 0 if $r_glob;
+		}
 		use strict 'refs';
 		
 		unless(defined $r_glob) {

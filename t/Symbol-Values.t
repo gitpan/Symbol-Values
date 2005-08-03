@@ -1,13 +1,13 @@
 # before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Symbol-Values.t'
 
-# Revision: $Id: Symbol-Values.t,v 1.4 2005/08/01 18:02:08 kay Exp $
+# Revision: $Id: Symbol-Values.t,v 1.6 2005/08/03 20:55:00 kay Exp $
 
 #########################
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 75;
+use Test::More tests => 79;
 BEGIN { use_ok('Symbol::Values') };
 
 #########################
@@ -402,3 +402,25 @@ ok(symbol("test2")->code eq \&test2);
 # Test 75
 eval { symbol('(abc)') };
 ok($@ =~ /^FATAL: Invalid symbol name/);
+
+#*********************************************************************
+# Special Variable
+#*********************************************************************
+
+# Test 76
+our $^W = 1;
+ok( symbol('^W')->scalar == 1 );
+
+# Test 77
+symbol('^W')->scalar = 0;
+ok( symbol('^W')->scalar == 0 );
+
+# Test 78
+$^W = 1;
+ok( symbol(*^W)->scalar == 1 );
+
+# Test 79
+symbol(*^W)->scalar = 0;
+ok( symbol(*^W)->scalar == 0 );
+
+
