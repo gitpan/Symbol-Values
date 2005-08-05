@@ -1,5 +1,14 @@
 Revision history for Perl extension Symbol::Values.
-$Id: Changes,v 1.5 2005/08/03 20:53:58 kay Exp $
+$Id: Changes,v 1.6 2005/08/05 07:50:04 kay Exp $
+
+1.04  Fri Aug 05 2005
+    - Improved handling of name of special variables (e.g. "$:").
+    - Changed error/warning messages.
+    - More comments.
+    - Create new hash/array value if they were not in the glob
+      when the user accessed to them through hash/array method.
+      (With warning messages)
+    - Deleted values of "PREREQ_PM" in Makefile.PL.
 
 1.03  Thu Aug 04 2005
     - Fixed the bug could not access to special variables.

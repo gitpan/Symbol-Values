@@ -4,12 +4,18 @@ package Symbol::Values;
 
 # Symbol::Values.pm
 # ------------------------------------------------------------------------
-# Revision: $Id: Values.pm,v 1.20 2005/08/03 20:43:24 kay Exp $
+# Revision: $Id: Values.pm,v 1.23 2005/08/05 07:50:04 kay Exp $
 # Written by Keitaro Miyazaki<KHC03156@nifty.ne.jp>
 # Copyright 2005 Keitaro Miyazaki All Rights Reserved.
 
 # HISTORY
 # ------------------------------------------------------------------------
+# 2005-08-05 Version 1.0.4
+#            - Improved handling of name of special variables (e.g. "$:").
+#            - Changed error/warning messages.
+#            - More comments.
+#            - Create new hash/array value if they were not in the glob
+#              when the user accessed to them through hash/array method.
 # 2005-08-04 Version 1.0.3
 #            - Fixed the bug could not access to special variables.
 # 2005-08-03 Version 1.0.2
@@ -40,8 +46,8 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '1.03';
-our $REVISION = '$Id: Values.pm,v 1.20 2005/08/03 20:43:24 kay Exp $';
+our $VERSION = '1.04';
+our $REVISION = '$Id: Values.pm,v 1.23 2005/08/05 07:50:04 kay Exp $';
 
 =head1 NAME
 
@@ -153,45 +159,50 @@ sub new {
 	my $glob_or_sym = $_[0];
 	my $r_glob;
 	
+	# no argument
 	if (! $glob_or_sym) {
 		$r_glob = Symbol::gensym();
 
+		
+	# glob was passed
 	} elsif (ref(\$glob_or_sym) eq 'GLOB') {
 		$r_glob = \$_[0];
 
+	# name was passed
 	} else {
 		
-		$glob_or_sym =~ m/\*?(.*::)?([^:]+)/o;
-		my $sym_tbl = $1;
+		$glob_or_sym =~ m/\*?(?:(.*)::)?(.+)$/o;
+		my $pkg  = $1;
 		my $name = $2;
 		
-		unless ($sym_tbl) {
-			my $caller_pkg = (caller(0))[0];
-			$sym_tbl = "${caller_pkg}::";
+		unless ($pkg) {
+			$pkg = (caller(0))[0];
 		}
 		
-		no strict 'refs';
 		
 		my $new_symbol = 0;
-		if (warnings::enabled() && !exists(${$sym_tbl}{$name})) {
-			$new_symbol = 1;
-		}
+		{
+			no strict 'refs';
 
-		$r_glob = eval "\\\*${sym_tbl}${name}";
-		
-		# May be special vailable
-		unless (defined $r_glob) {
-			$r_glob = eval "\\\*{$name}";
-			$new_symbol = 0 if $r_glob;
+			# try to get the glob from symbol table
+			$r_glob = exists ${"${pkg}::"}{$name}
+				? \${"${pkg}::"}{$name} : undef;
+			
+			# create new name if it is not name of special variable.
+			unless ($r_glob) {
+				$r_glob = eval "package $pkg; \\\*{$name}";
+				$new_symbol = 1 if exists ${"${pkg}::"}{$name};
+			}
 		}
-		use strict 'refs';
 		
+		# Fatal error
 		unless(defined $r_glob) {
-			croak "FATAL: Invalid symbol name \"$glob_or_sym\"";
+			croak "Invalid name name \"$glob_or_sym\": possible typo";
 		}
 		
+		# warn if new symbol
 		if ($new_symbol) {
-			carp "WARNING: New symbol \"${sym_tbl}${name}\" created";
+			warnings::warnif "Name \"${pkg}::${name}\" created: possible typo";
 		}
 	}
 	
@@ -269,6 +280,17 @@ new value.
 sub array : lvalue {
 	my $r_glob = $_[0]->[0];
 	my $ret;
+
+	# create new array value if not exists.
+	unless (defined $_[0]->array_ref) {
+		my @new;
+		$_[0]->array_ref = \@new;
+		*{$r_glob} =~ /^\*(.*)$/;
+		my $name = $1;
+		warnings::warnif('Symbol::Values',
+						 "New array \"\@${name}\" created: possible typo");
+	}
+
 	tie $ret, '__TiedSymbol_Constant', scalar @{$_[0]->array_ref} unless wantarray;
 	
 	*{$r_glob} = [] unless defined *{$r_glob}{ARRAY};
@@ -311,6 +333,17 @@ new value.
 sub hash : lvalue {
 	my $r_glob = $_[0]->[0];
 	my $ret;
+	
+	# create new hash value if not exists.
+	unless (defined $_[0]->hash_ref) {
+		my %new;
+		$_[0]->hash_ref = \%new;
+		*{$r_glob} =~ /^\*(.*)$/;
+		my $name = $1;
+		warnings::warnif('Symbol::Values',
+						 "New hash \"\%${name}\" created: possible typo");
+	}
+
 	tie $ret, '__TiedSymbol_Constant', scalar %{$_[0]->hash_ref} unless wantarray;
 
 	*{$r_glob} = {} unless defined *{$r_glob}{HASH};

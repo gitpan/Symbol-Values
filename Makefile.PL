@@ -1,15 +1,12 @@
 use 5.006;
 use ExtUtils::MakeMaker;
-# $Id: Makefile.PL,v 1.2 2005/08/02 06:30:29 kay Exp $
+# $Id: Makefile.PL,v 1.3 2005/08/05 07:50:04 kay Exp $
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 WriteMakefile(
     NAME              => 'Symbol::Values',
     VERSION_FROM      => 'lib/Symbol/Values.pm', # finds $VERSION
     PREREQ_PM         => {
-                          Carp          => 1.0,
-                          Symbol        => 1.0,
-                          Tie::Scalar   => 1.0,
                          },
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Symbol/Values.pm', # retrieve abstract from module

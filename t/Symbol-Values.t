@@ -1,7 +1,7 @@
 # before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Symbol-Values.t'
 
-# Revision: $Id: Symbol-Values.t,v 1.6 2005/08/03 20:55:00 kay Exp $
+# Revision: $Id: Symbol-Values.t,v 1.8 2005/08/05 07:55:48 kay Exp $
 
 #########################
 
@@ -363,7 +363,7 @@ $sym->scalar = "scalar value";
 ok($sym->scalar eq "scalar value");
 
 # Test 70
-($sym->array) = (9, 8, 7);
+{no warnings; ($sym->array) = (9, 8, 7)}
 ok(($sym->array)[0] == 9 &&
    ($sym->array)[1] == 8 &&
    ($sym->array)[2] == 7);
@@ -373,7 +373,7 @@ eval {no warnings; $sym->array = (9, 8, 7)};
 ok($@ =~ /^Can't modify list value in scalar context/);
 
 # Test 72
-($sym->hash) = (v => 'w', x => 'y');
+{no warnings; ($sym->hash) = (v => 'w', x => 'y')}
 my %h = $sym->hash;
 ok($h{v} eq 'w' &&
    $h{x} eq 'y');
@@ -400,8 +400,8 @@ ok(symbol("test2")->code eq \&test2);
 #*********************************************************************
 
 # Test 75
-eval { symbol('(abc)') };
-ok($@ =~ /^FATAL: Invalid symbol name/);
+eval { symbol('&&') };
+ok($@ =~ /^Invalid name name "&&": possible typo/);
 
 #*********************************************************************
 # Special Variable
