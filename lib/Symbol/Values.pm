@@ -4,28 +4,30 @@ package Symbol::Values;
 
 # Symbol::Values.pm
 # ------------------------------------------------------------------------
-# Revision: $Id: Values.pm,v 1.23 2005/08/05 07:50:04 kay Exp $
+# Revision: $Id: Values.pm,v 1.24 2005/08/07 12:14:15 kay Exp $
 # Written by Keitaro Miyazaki<KHC03156@nifty.ne.jp>
 # Copyright 2005 Keitaro Miyazaki All Rights Reserved.
 
 # HISTORY
 # ------------------------------------------------------------------------
-# 2005-08-05 Version 1.0.4
+# 2005-08-07 Version 1.05
+#            - Modefied test which failed on some platforms.
+# 2005-08-05 Version 1.04
 #            - Improved handling of name of special variables (e.g. "$:").
 #            - Changed error/warning messages.
 #            - More comments.
 #            - Create new hash/array value if they were not in the glob
 #              when the user accessed to them through hash/array method.
-# 2005-08-04 Version 1.0.3
+# 2005-08-04 Version 1.03
 #            - Fixed the bug could not access to special variables.
 # 2005-08-03 Version 1.0.2
 #            - Changed "use 5.008" to "use 5.006".
-# 2005-08-02 Version 1.0.1
+# 2005-08-02 Version 1.01
 #            - Fixed typo regarding to package name in POD document.
 #            - Improved warning message handling by "use warnings::register".
 #            - The "new" method will raise exception when invalid symbol name
 #              was passed.
-# 2005-07-31 Version 1.0.0
+# 2005-07-31 Version 1.00
 #            - Initial version.
 #            - Rewrited as CPAN module.
 # 2005-07-29 Wrote prototype of this module.
@@ -46,8 +48,8 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '1.04';
-our $REVISION = '$Id: Values.pm,v 1.23 2005/08/05 07:50:04 kay Exp $';
+our $VERSION = '1.05';
+our $REVISION = '$Id: Values.pm,v 1.24 2005/08/07 12:14:15 kay Exp $';
 
 =head1 NAME
 

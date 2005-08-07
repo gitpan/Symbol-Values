@@ -1,13 +1,15 @@
 # before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Symbol-Values.t'
 
-# Revision: $Id: Symbol-Values.t,v 1.8 2005/08/05 07:55:48 kay Exp $
+# Revision: $Id: Symbol-Values.t,v 1.9 2005/08/05 13:44:32 kay Exp $
 
 #########################
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
 use Test::More tests => 79;
+use File::Temp ();
+
 BEGIN { use_ok('Symbol::Values') };
 
 #########################
@@ -163,12 +165,15 @@ ok($sym->io eq $io1);               # *test{IO} eq $io;
 
 
 # Test 31
-open $io1, "< README";
+my $tmp_file = File::Temp->new();
+open $io1, "$tmp_file";
 die "\n$!\n" if $!;
 my $fnum1 = fileno($sym->io);
 my $fnum2 = fileno($io1);
 close $io1;
+undef $tmp_file;
 ok($fnum1 == $fnum2);               # fileno(*test) eq fileno($io1);
+
 
 # Test 32
 eval { $sym->io = [1,2,3] };
