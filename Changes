@@ -1,5 +1,8 @@
 Revision history for Perl extension Symbol::Values.
-$Id: Changes,v 1.8 2005/08/07 12:14:15 kay Exp $
+$Id: Changes,v 1.9 2005/08/10 08:56:57 kay Exp $
+
+1.06  Sun Aug 10 2005
+    - Modefied test which failed on some platforms.
 
 1.05  Sun Aug 07 2005
     - Modefied test which failed on some platforms.

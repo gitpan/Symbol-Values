@@ -4,12 +4,14 @@ package Symbol::Values;
 
 # Symbol::Values.pm
 # ------------------------------------------------------------------------
-# Revision: $Id: Values.pm,v 1.24 2005/08/07 12:14:15 kay Exp $
-# Written by Keitaro Miyazaki<KHC03156@nifty.ne.jp>
+# Revision: $Id: Values.pm,v 1.27 2005/08/10 08:56:57 kay Exp $
+# Written by Keitaro Miyazaki<kmiyazaki@cpan.org>
 # Copyright 2005 Keitaro Miyazaki All Rights Reserved.
 
 # HISTORY
 # ------------------------------------------------------------------------
+# 2005-08-10 Version 1.06
+#            - Modefied test which failed on some platforms.
 # 2005-08-07 Version 1.05
 #            - Modefied test which failed on some platforms.
 # 2005-08-05 Version 1.04
@@ -48,8 +50,8 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '1.05';
-our $REVISION = '$Id: Values.pm,v 1.24 2005/08/07 12:14:15 kay Exp $';
+our $VERSION = '1.06';
+our $REVISION = '$Id: Values.pm,v 1.27 2005/08/10 08:56:57 kay Exp $';
 
 =head1 NAME
 
@@ -490,7 +492,7 @@ Test file "t/Symbol-Values.t" in the distribution of this module -- This file pr
 
 =head1 AUTHOR
 
-Keitaro Miyazaki, E<lt>KHC03156@nifty.ne.jpE<gt>
+Keitaro Miyazaki, E<lt>kmiyazaki@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 

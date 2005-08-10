@@ -1,7 +1,8 @@
+#!perl
 # before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl Symbol-Values.t'
 
-# Revision: $Id: Symbol-Values.t,v 1.9 2005/08/05 13:44:32 kay Exp $
+# Revision: $Id: Symbol-Values.t,v 1.10 2005/08/10 08:56:57 kay Exp $
 
 #########################
 
@@ -163,21 +164,35 @@ my $io1 = Symbol::geniosym;
 $sym->io = $io1;                    # *test = $io1;
 ok($sym->io eq $io1);               # *test{IO} eq $io;
 
-
-# Test 31
-my $tmp_file = File::Temp->new();
+my $template = 'tmpdirXXXXXX';
+my $tmp_dir = File::Temp::tempdir( $template ,
+								   DIR => File::Spec->curdir,
+								   CLEANUP => 1,
+								 );
+my $tmp_file = File::Temp->new(
+							   TEMPLATE => 'symvaltestXXXXXXX',
+							   DIR => $tmp_dir,
+							   SUFFIX => '.tmp',
+							   UNLINK => 1,
+							  );
 open $io1, "$tmp_file";
-die "\n$!\n" if $!;
-my $fnum1 = fileno($sym->io);
-my $fnum2 = fileno($io1);
-close $io1;
-undef $tmp_file;
-ok($fnum1 == $fnum2);               # fileno(*test) eq fileno($io1);
 
+SKIP: {
+	skip "It seems your system failed to open tmp file($!).", 2, if $!;
 
-# Test 32
-eval { $sym->io = [1,2,3] };
-ok($@ =~ /^Can't assign /);
+	# Test 31
+	my $fnum1 = fileno($sym->io);
+	my $fnum2 = fileno($io1);
+	close $io1;
+	undef $tmp_file;
+	undef $tmp_dir;
+	ok($fnum1 == $fnum2);               # fileno(*test) eq fileno($io1);
+	
+	
+	# Test 32
+	eval { $sym->io = [1,2,3] };
+	ok($@ =~ /^Can't assign /);
+}
 
 #*********************************************************************
 # Test glob
