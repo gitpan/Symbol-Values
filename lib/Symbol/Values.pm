@@ -4,12 +4,14 @@ package Symbol::Values;
 
 # Symbol::Values.pm
 # ------------------------------------------------------------------------
-# Revision: $Id: Values.pm,v 1.27 2005/08/10 08:56:57 kay Exp $
+# Revision: $Id: Values.pm,v 1.29 2005/08/27 17:24:03 kay Exp $
 # Written by Keitaro Miyazaki<kmiyazaki@cpan.org>
 # Copyright 2005 Keitaro Miyazaki All Rights Reserved.
 
 # HISTORY
 # ------------------------------------------------------------------------
+# 2005-08-28 Version 1.07
+#            - Make $@ untouched.
 # 2005-08-10 Version 1.06
 #            - Modefied test which failed on some platforms.
 # 2005-08-07 Version 1.05
@@ -50,8 +52,8 @@ our %EXPORT_TAGS = ( 'all' => [ qw(
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 
 
-our $VERSION = '1.06';
-our $REVISION = '$Id: Values.pm,v 1.27 2005/08/10 08:56:57 kay Exp $';
+our $VERSION = '1.07';
+our $REVISION = '$Id: Values.pm,v 1.29 2005/08/27 17:24:03 kay Exp $';
 
 =head1 NAME
 
@@ -194,7 +196,9 @@ sub new {
 			
 			# create new name if it is not name of special variable.
 			unless ($r_glob) {
+				my $orig_exp = $@;
 				$r_glob = eval "package $pkg; \\\*{$name}";
+				$@ = $orig_exp;
 				$new_symbol = 1 if exists ${"${pkg}::"}{$name};
 			}
 		}
@@ -743,7 +747,9 @@ sub STORE {
 		$new_val = *{$new_val}{IO};
 	}
 
+	my $orig_exp = $@;
 	if (defined($new_val) && ! eval { $new_val->isa('IO') }) {
+		$@ = $orig_exp;
 		croak "Can't assign non io object to value of io";
 	}
 

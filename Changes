@@ -1,5 +1,8 @@
 Revision history for Perl extension Symbol::Values.
-$Id: Changes,v 1.9 2005/08/10 08:56:57 kay Exp $
+$Id: Changes,v 1.10 2005/08/27 17:24:03 kay Exp $
+
+1.07  Sun Aug 28 2005
+    - Make $@ untouched.
 
 1.06  Sun Aug 10 2005
     - Modefied test which failed on some platforms.
